@@ -23,6 +23,7 @@ class ScheduleController extends Controller
         ->leftJoin('client','schedule.client_id','=','client.id')
         ->leftJoin('package_decoration','schedule.package_decoration_id','=','package_decoration.id')
         ->select('schedule.*','client.nama_client','client.email_client','client.telepon_client','package_decoration.nama_paket','package_decoration.harga_paket')
+        ->whereIn('status',[0,1])
         ->orderBy('schedule.id','DESC')->get();
 
 		$data = array(  
@@ -36,11 +37,13 @@ class ScheduleController extends Controller
     {
         $client=DB::table('client')->orderBy('nama_client','ASC')->get();
         $package=DB::table('package_decoration')->orderBy('nama_paket','ASC')->get();
+        $kode_schedule = "BNZ/SCH/".date('Y')."/".date('m')."/".$this->quickRandom();
 
 		$data = array(  
             'indexPage' => "Tambah Data Schedule",
             'client' => $client,
-            'package' => $package
+            'package' => $package,
+            'kode_schedule' => $kode_schedule
 		);
         return view($this->base.'tambah')->with($data);
     }
@@ -52,8 +55,7 @@ class ScheduleController extends Controller
         $tanggal_selesai=$request->input('tanggal_selesai');
         $package_decoration_id=$request->input('package_decoration_id');
         $venue=$request->input('venue');
-
-        $kode_schedule = date('Y')."/".date('m')."/SCH/".$this->quickRandom();
+        $kode_schedule=$request->input('kode_schedule');
 
 		$insert = DB::table('schedule')->insert(
             [
@@ -63,7 +65,7 @@ class ScheduleController extends Controller
                 'tanggal_selesai' => $tanggal_selesai,
                 'package_decoration_id' => $package_decoration_id,
                 'venue' => $venue,
-                'status' => 1,
+                'status' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]

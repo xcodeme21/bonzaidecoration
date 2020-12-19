@@ -18,8 +18,19 @@ class DashboardController extends Controller
 
     public function index()
     {
+        $totalclient=DB::table('client')->count();
+        $scheduletahunini=DB::table('schedule')->where('status','!=',3)->whereYear('tanggal_schedule',date('Y'))->count();
+        $schedulebulanini=DB::table('schedule')->where('status','!=',3)->whereMonth('tanggal_schedule',date('m'))->count();
+        $dpinv=DB::table('invoice')->where('status_invoice','!=',2)->sum('dp');
+        $sisainv=DB::table('invoice')->where('status_invoice','!=',2)->sum('sisa_pembayaran');
+        $total_pemasukan=$dpinv+$sisainv;
+
 		$data = array(  
             'indexPage' => "Dashboard",
+            'totalclient' =>$totalclient,
+            'scheduletahunini' =>$scheduletahunini,
+            'schedulebulanini' =>$schedulebulanini,
+            'total_pemasukan' =>$total_pemasukan,
         );
         
         return view($this->base.'index')->with($data);

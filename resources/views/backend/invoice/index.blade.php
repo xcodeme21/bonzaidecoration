@@ -34,7 +34,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row-fluid animated bounceInRight" align="right">    
-                                        <a href="{{ route('schedule.tambah') }}" type="button" class="btn btn-primary waves-effect waves-light">+ Tambah</a>
+                                        <a href="{{ route('invoice.tambah') }}" type="button" class="btn btn-primary waves-effect waves-light">+ Tambah</a>
                                     </div>
                                     <hr>
                                     <div class="table-responsive animated bounceInUp">
@@ -43,11 +43,10 @@
                                             <tr>
                                                 <th>No.</th>
                                                 <th>Kode Schedule</th>
-                                                <th>Nama Client</th>
-                                                <th>Paket</th>
-                                                <th>Tanggal Schedule</th>
-                                                <th>Tanggal Selesai</th>
-                                                <th>Venue</th>
+                                                <th>No. Invoice</th>
+                                                <th>Tanggal Invoice</th>
+                                                <th>DP</th>
+                                                <th>Keterangan</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -56,34 +55,23 @@
         
                                             <tbody>
                                             <?php $no=0; ?>
-                                            @foreach(@$schedule as $rs)
+                                            @foreach(@$invoice as $rs)
                                             <?php $no++; ?>
                                             <tr>
                                                 <td>{{ $no }}</td>
                                                 <td>{{ @$rs->kode_schedule }}</td>
+                                                <td>{{ @$rs->no_invoice }}</td>
+                                                <td>{{ @$rs->tanggal_invoice }}</td>
+                                                <td>Rp. {{ number_format(@$rs->dp,0,',','.') }}</td>
+                                                <td>{!! @$rs->keterangan !!}</td>
                                                 <td>
-                                                    {{ @$rs->nama_client }}
-                                                    <br>
-                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary">{{ @$rs->email_client }}</span> - <span class="badge badge-soft-danger">{{ @$rs->telepon_client }}</span></span> 
-                                                </td>
-                                                <td>
-                                                    {{ @$rs->nama_paket }}
-                                                    <br>
-                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary">Rp. {{ number_format(@$rs->harga_paket,0,',','.') }}</span>
-                                                </td>
-                                                <td>{{ @$rs->tanggal_schedule }}</td>
-                                                <td>{{ @$rs->tanggal_selesai }}</td>
-                                                <td>{!! @$rs->venue !!}</td>
-                                                <td>
-                                                    @if(@$rs->status == 0)
-                                                    <label class="badge badge-info"><i class="fa fa-spin fa-spinner"></i> PROGRESS</label>
-                                                    @elseif(@$rs->status == 1)
                                                     <label class="badge badge-primary"><i class="fa fa-check"></i> INVOICE</label>
-                                                    @endif
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('schedule.edit',@$rs->id) }}"><i class="far fa-edit text-info mr-1"></i></a>
-                                                    <a href="{{ route('schedule.hapus',@$rs->id) }}"><i class="far fa-trash-alt text-danger"></i></a>
+                                                    <a href="{{ route('invoice.edit',@$rs->id) }}" class="btn btn-info btn-xs"><i class="far fa-edit mr-1"></i> Edit</a>
+                                                    <a href="{{ route('invoice.hapus',@$rs->id) }}" class="btn btn-danger btn-xs"><i class="far fa-trash-alt"></i> Hapus</a>
+                                                    <a href="{{ route('invoice.kwitansi',@$rs->id) }}" class="btn btn-success btn-xs"><i class="fa fa-file-pdf"></i> Kwitansi</a>
+                                                    <a href="{{ route('invoice.batal',@$rs->id) }}" class="btn btn-warning btn-xs"><i class="fa fa-times"></i> Batal</a>
                                                 </td>
                                             </tr>
                                             @endforeach

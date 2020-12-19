@@ -67,6 +67,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="example-tel-input" class="col-sm-2 col-form-label text-right">Kode Schedule</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="text" value="{{ @$rs->kode_schedule }}"  name="kode_schedule" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="example-tel-input" class="col-sm-2 col-form-label text-right">Tanggal Schedule</label>
                                             <div class="col-sm-10">
                                                 <input class="form-control mdate" type="text"  name="tanggal_schedule" value="{{ @$rs->tanggal_schedule }}" required>
@@ -82,7 +88,7 @@
                                             <label for="example-text-input" class="col-sm-2 col-form-label text-right">Package Decoration</label>
                                             <div class="col-sm-10">
                                                 <select class="form-control" name="package_decoration_id" id="package_decoration_id" required>
-                                                    <option value="">-- Pilih Client --</option>
+                                                    <option value="">-- Pilih Package Decoration --</option>
                                                     @foreach(@$package as $pak)
                                                     <option value="{{ @$pak->id }}" @if(@$rs->package_decoration_id == @$pak->id) selected @endif>{{ @$pak->nama_paket }} - Rp. {{ number_format(@$pak->harga_paket,0,',','.') }}</option>
                                                     @endforeach

@@ -17,7 +17,7 @@
                             <div class="page-title-box">
                                 <div class="float-right">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="javascript:void(0);">Schedule</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:void(0);">Invoice</a></li>
                                         <li class="breadcrumb-item active">{{ @$indexPage }}</li>
                                     </ol><!--end breadcrumb-->
                                 </div><!--end /div-->
@@ -34,74 +34,81 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    {{ Form::open(['route'=>'schedule.add' ,'method' => 'post', 'class'=>'form-horizontal mt-3  animated bounceIn','enctype'=>'multipart/form-data']) }} 
-                                    {{ Form::token() }}
-                                        <div class="form-group row">
-                                            <label for="example-text-input" class="col-sm-2 col-form-label text-right">Client</label>
-                                            <div class="col-sm-10">
-                                                <select class="form-control" name="client_id" id="client_id" required>
-                                                    <option value="">-- Pilih Client --</option>
-                                                    @foreach(@$client as $cl)
-                                                    <option value="{{ @$cl->id }}">{{ @$cl->nama_client }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="example-tel-input" class="col-sm-2 col-form-label text-right">Email</label>
-                                            <div class="col-sm-10">
-                                                <input class="form-control" type="email" id="email_client" name="email_client" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="example-tel-input" class="col-sm-2 col-form-label text-right">No.Telepon</label>
-                                            <div class="col-sm-10">
-                                                <input class="form-control" type="text" id="telepon_client" name="telepon_client" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="example-password-input" class="col-sm-2 col-form-label text-right">Alamat</label>
-                                            <div class="col-sm-10">
-                                                <textarea class="form-control" rows="5" id="alamat_client" name="alamat_client" readonly></textarea>
-                                            </div>
-                                        </div>
+                                {{ Form::open(['route'=>'invoice.update' ,'method' => 'post', 'class'=>'form-horizontal mt-3  animated bounceIn','enctype'=>'multipart/form-data']) }} 
+						        {{ Form::token() }}
                                         <div class="form-group row">
                                             <label for="example-tel-input" class="col-sm-2 col-form-label text-right">Kode Schedule</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" value="{{ @$kode_schedule }}"  name="kode_schedule" readonly>
+                                                <input class="form-control" type="text" value="{{ @$schedule->kode_schedule }}" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="example-tel-input" class="col-sm-2 col-form-label text-right">Nama Client</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="text" value="{{ @$schedule->nama_client }}" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="example-tel-input" class="col-sm-2 col-form-label text-right">Tanggal Schedule</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control mdate" type="text"  name="tanggal_schedule" required>
+                                                <input class="form-control" type="text" value="{{ @$schedule->tanggal_schedule }}" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="example-tel-input" class="col-sm-2 col-form-label text-right">Tanggal Selesai</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control mdate" type="text"  name="tanggal_selesai" required>
+                                                <input class="form-control" type="text" value="{{ @$schedule->tanggal_selesai }}" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="example-text-input" class="col-sm-2 col-form-label text-right">Package Decoration</label>
+                                            <label for="example-tel-input" class="col-sm-2 col-form-label text-right">Package Decoration</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control" name="package_decoration_id" id="package_decoration_id" required>
-                                                    <option value="">-- Pilih Package Decoration --</option>
-                                                    @foreach(@$package as $pak)
-                                                    <option value="{{ @$pak->id }}">{{ @$pak->nama_paket }} - Rp. {{ number_format(@$pak->harga_paket,0,',','.') }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <input class="form-control" type="text" value="{{ @$schedule->nama_paket }}" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="example-password-input" class="col-sm-2 col-form-label text-right">Venue</label>
+                                            <label for="example-datetime-local-input" class="col-sm-2 col-form-label text-right">Harga</label>
                                             <div class="col-sm-10">
-                                                <textarea class="form-control ckeditor" rows="5" name="venue" required></textarea>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Rp.</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" value="{{ number_format(@$schedule->harga_paket,0,',','.') }}" readonly>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <div class="form-group row">
+                                            <label for="example-tel-input" class="col-sm-2 col-form-label text-right">No. Invoice</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="text" value="{{ @$rs->no_invoice }}" readonly>
+                                                <input type="hidden" name="id" value="{{ @$rs->id }}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="example-tel-input" class="col-sm-2 col-form-label text-right">Tanggal Invoice</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control mdate" type="text" value="{{ @$rs->tanggal_invoice }}" name="tanggal_invoice" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="example-datetime-local-input" class="col-sm-2 col-form-label text-right">DP</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Rp.</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="harga_paket" value="{{ number_format(@$rs->dp,0,',','.') }}" name="dp" required>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <div class="form-group row">
+                                            <label for="example-password-input" class="col-sm-2 col-form-label text-right">Keterangan</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control ckeditor" rows="5" name="keterangan" required>{{ @$rs->keterangan }}</textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row-fluid" align="right">
-                                            <a href="{{ route('schedule') }}" type="button" class="btn btn-info waves-effect waves-light">Kembali</a>
+                                            <a href="{{ route('invoice') }}" type="button" class="btn btn-info waves-effect waves-light">Kembali</a>
                                             <button type="submit" class="btn btn-success waves-effect waves-light">Simpan</button>
                                         </div>
                                     {{ Form::close() }}

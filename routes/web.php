@@ -51,6 +51,24 @@ Route::group(['prefix'=>'backend', 'middleware'=>'auth'], function(){
     Route::get('schedule/hapus/{id}', [App\Http\Controllers\Backend\ScheduleController::class, 'hapus'])->name('schedule.hapus');
     Route::get('schedule/detailclient/{id}', [App\Http\Controllers\Backend\ScheduleController::class, 'detailclient'])->name('schedule.detailclient');
     
+	/*MASTER INVOICE*/
+    Route::get('invoice', [App\Http\Controllers\Backend\InvoiceController::class, 'index'])->name('invoice');
+    Route::get('invoice/tambah', [App\Http\Controllers\Backend\InvoiceController::class, 'tambah'])->name('invoice.tambah');
+    Route::post('invoice/add', [App\Http\Controllers\Backend\InvoiceController::class, 'add'])->name('invoice.add');
+    Route::get('invoice/edit/{id}', [App\Http\Controllers\Backend\InvoiceController::class, 'edit'])->name('invoice.edit');
+    Route::post('invoice/update', [App\Http\Controllers\Backend\InvoiceController::class, 'update'])->name('invoice.update');
+    Route::get('invoice/hapus/{id}', [App\Http\Controllers\Backend\InvoiceController::class, 'hapus'])->name('invoice.hapus');
+    Route::get('invoice/detailschedule/{id}', [App\Http\Controllers\Backend\InvoiceController::class, 'detailschedule'])->name('invoice.detailschedule');
+    Route::get('invoice/batal/{id}', [App\Http\Controllers\Backend\InvoiceController::class, 'batal'])->name('invoice.batal');
+    Route::post('invoice/batalkan', [App\Http\Controllers\Backend\InvoiceController::class, 'batalkan'])->name('invoice.batalkan');
+    Route::get('invoice/kwitansi/{id}', [App\Http\Controllers\Backend\InvoiceController::class, 'kwitansi'])->name('invoice.kwitansi');
+    Route::post('invoice/buatkwitansi', [App\Http\Controllers\Backend\InvoiceController::class, 'buatkwitansi'])->name('invoice.buatkwitansi');
+    
+    /*LAPORAN*/
+    Route::get('laporan', [App\Http\Controllers\Backend\LaporanController::class, 'index'])->name('laporan');
+    Route::get('laporan/cetakinvoice/{id}', [App\Http\Controllers\Backend\LaporanController::class, 'cetakinvoice'])->name('laporan.cetakinvoice');
+    Route::get('laporan/cetakkwitansi/{id}', [App\Http\Controllers\Backend\LaporanController::class, 'cetakkwitansi'])->name('laporan.cetakkwitansi');
+    
 
 });
     

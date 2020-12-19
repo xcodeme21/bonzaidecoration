@@ -33,10 +33,6 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="row-fluid animated bounceInRight" align="right">    
-                                        <a href="{{ route('schedule.tambah') }}" type="button" class="btn btn-primary waves-effect waves-light">+ Tambah</a>
-                                    </div>
-                                    <hr>
                                     <div class="table-responsive animated bounceInUp">
                                         <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                             <thead>
@@ -79,11 +75,29 @@
                                                     <label class="badge badge-info"><i class="fa fa-spin fa-spinner"></i> PROGRESS</label>
                                                     @elseif(@$rs->status == 1)
                                                     <label class="badge badge-primary"><i class="fa fa-check"></i> INVOICE</label>
+                                                    <br>
+                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary"><b>INVOICE :</b> <?php $inv=$invoice->where('kode_schedule',@$rs->kode_schedule)->first(); echo $inv->no_invoice; ?></span> - <span class="badge badge-soft-danger"><?php echo $inv->tanggal_invoice; ?></span></span> 
+                                                    @elseif(@$rs->status == 2)
+                                                    <label class="badge badge-success"><i class="fa fa-check"></i> LUNAS</label>
+                                                    <br>
+                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary"><b>INVOICE :</b> <?php $inv=$invoice->where('kode_schedule',@$rs->kode_schedule)->first(); echo $inv->no_invoice; ?></span> - <span class="badge badge-soft-danger"><?php echo $inv->tanggal_invoice; ?></span></span> 
+                                                    <br>
+                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary"><b>KWITANSI :</b> <?php echo $inv->kode_kwitansi; ?></span> - <span class="badge badge-soft-danger"><?php echo $inv->tanggal_kwitansi; ?></span></span> 
+                                                    @elseif(@$rs->status == 3)
+                                                    <label class="badge badge-danger"><i class="fa fa-times"></i> BATAL</label>
+                                                    <br>
+                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary"><b>ALASAN BATAL :</b> <?php $inv=$invoice->where('kode_schedule',@$rs->kode_schedule)->first(); echo $inv->keterangan_batal; ?></span> - <span class="badge badge-soft-danger"><?php echo $inv->tanggal_batal; ?></span></span> 
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('schedule.edit',@$rs->id) }}"><i class="far fa-edit text-info mr-1"></i></a>
-                                                    <a href="{{ route('schedule.hapus',@$rs->id) }}"><i class="far fa-trash-alt text-danger"></i></a>
+                                                    @if(@$rs->status == 1)
+                                                    <a href="{{ route('laporan.cetakinvoice',@$rs->id) }}" target="_blank" class="btn btn-primary btn-xs btn-block" style="margin-bottom:5px;"><i class="fa fa-print"></i> Cetak Invoice</a>
+                                                    @elseif(@$rs->status == 2)
+                                                    <a href="{{ route('laporan.cetakinvoice',@$rs->id) }}" target="_blank" class="btn btn-primary btn-xs btn-block" style="margin-bottom:5px;"><i class="fa fa-print"></i> Cetak Invoice</a>
+                                                    <a href="{{ route('laporan.cetakkwitansi',@$rs->id) }}" target="_blank" class="btn btn-success btn-xs btn-block"><i class="fa fa-print"></i>Cetak Kwitansi</a>
+                                                    @else
+                                                    -
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @endforeach

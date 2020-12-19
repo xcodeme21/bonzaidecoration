@@ -105,8 +105,18 @@
                     </li><!--end submenu-->
 
                     <li class="has-submenu">
-                        <a href="{{ route('schedule') }}">
-                            <span><i class="fa fa-history"></i> Schedule</span>
+                        <a href="#">
+                            <span><i class="fa fa-list"></i> Transaksi</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="{{ route('schedule') }}"><i class="fa fa-history"></i>Schedule</a></li>
+                            <li><a href="{{ route('invoice') }}"><i class="fas fa-file-invoice-dollar"></i>Invoice</a></li>
+                        </ul>
+                    </li><!--end submenu-->
+
+                    <li class="has-submenu">
+                        <a href="{{ route('laporan') }}">
+                            <span><i class="fa fa-list"></i> Laporan</span>
                         </a>
                     </li><!--end has-submenu-->
 
