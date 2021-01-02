@@ -76,25 +76,24 @@
                                                     @elseif(@$rs->status == 1)
                                                     <label class="badge badge-primary"><i class="fa fa-check"></i> INVOICE</label>
                                                     <br>
-                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary"><b>INVOICE :</b> <?php $inv=$invoice->where('kode_schedule',@$rs->kode_schedule)->first(); echo $inv->no_invoice; ?></span> - <span class="badge badge-soft-danger"><?php echo $inv->tanggal_invoice; ?></span></span> 
+                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary"><b>INVOICE :</b> <?php @$inv=$invoice->where('kode_schedule',@$rs->kode_schedule)->first(); echo @$inv->no_invoice; ?></span> - <span class="badge badge-soft-danger"><?php echo @$inv->tanggal_invoice; ?></span></span> 
                                                     @elseif(@$rs->status == 2)
                                                     <label class="badge badge-success"><i class="fa fa-check"></i> LUNAS</label>
                                                     <br>
-                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary"><b>INVOICE :</b> <?php $inv=$invoice->where('kode_schedule',@$rs->kode_schedule)->first(); echo $inv->no_invoice; ?></span> - <span class="badge badge-soft-danger"><?php echo $inv->tanggal_invoice; ?></span></span> 
-                                                    <br>
-                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary"><b>KWITANSI :</b> <?php echo $inv->kode_kwitansi; ?></span> - <span class="badge badge-soft-danger"><?php echo $inv->tanggal_kwitansi; ?></span></span> 
+                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary"><b>INVOICE :</b> <?php @$inv=$invoice->where('kode_schedule',@$rs->kode_schedule)->first(); echo @$inv->no_invoice; ?></span> - <span class="badge badge-soft-danger"><?php echo @$inv->tanggal_invoice; ?></span></span> 
                                                     @elseif(@$rs->status == 3)
                                                     <label class="badge badge-danger"><i class="fa fa-times"></i> BATAL</label>
                                                     <br>
-                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary"><b>ALASAN BATAL :</b> <?php $inv=$invoice->where('kode_schedule',@$rs->kode_schedule)->first(); echo $inv->keterangan_batal; ?></span> - <span class="badge badge-soft-danger"><?php echo $inv->tanggal_batal; ?></span></span> 
+                                                    <span class="text-muted font-13"><span class="badge badge-soft-primary"><b>ALASAN BATAL :</b> <?php @$inv=$invoice->where('kode_schedule',@$rs->kode_schedule)->first(); echo @$inv->keterangan_batal; ?></span> - <span class="badge badge-soft-danger"><?php echo @$inv->tanggal_batal; ?></span></span> 
                                                     @endif
                                                 </td>
                                                 <td>
                                                     @if(@$rs->status == 1)
                                                     <a href="{{ route('laporan.cetakinvoice',@$rs->id) }}" target="_blank" class="btn btn-primary btn-xs btn-block" style="margin-bottom:5px;"><i class="fa fa-print"></i> Cetak Invoice</a>
+                                                    <a href="{{ route('laporan.lihatkwitansi',@$rs->id) }}" target="_blank" class="btn btn-success btn-xs btn-block"><i class="fa fa-eye"></i> Lihat Kwitansi</a>
                                                     @elseif(@$rs->status == 2)
                                                     <a href="{{ route('laporan.cetakinvoice',@$rs->id) }}" target="_blank" class="btn btn-primary btn-xs btn-block" style="margin-bottom:5px;"><i class="fa fa-print"></i> Cetak Invoice</a>
-                                                    <a href="{{ route('laporan.cetakkwitansi',@$rs->id) }}" target="_blank" class="btn btn-success btn-xs btn-block"><i class="fa fa-print"></i>Cetak Kwitansi</a>
+                                                    <a href="{{ route('laporan.lihatkwitansi',@$rs->id) }}" target="_blank" class="btn btn-success btn-xs btn-block"><i class="fa fa-eye"></i> Lihat Kwitansi</a>
                                                     @else
                                                     -
                                                     @endif

@@ -19,7 +19,12 @@ class InvoiceController extends Controller
   
     public function index()
     {
-        $invoice=DB::table('invoice')->where('status_invoice',0)->orderBy('id','DESC')->get();
+        $invoice=DB::table('invoice')
+        ->join('schedule','invoice.kode_schedule','=','schedule.kode_schedule')
+        ->join('client','schedule.client_id','=','client.id')
+        ->join('package_decoration','schedule.package_decoration_id','=','package_decoration.id')
+        ->select('invoice.*','client.nama_client','package_decoration.nama_paket')
+        ->where('status_invoice',0)->orderBy('id','DESC')->get();
 
 		$data = array(  
             'indexPage' => "Invoice",
@@ -49,8 +54,12 @@ class InvoiceController extends Controller
         $dp=str_replace(".", "",$request->input('dp'));
         $keterangan=$request->input('keterangan');
         
-        $schedule=DB::table('schedule')->where('id',$schedule_id)->first();
+        $schedule=DB::table('schedule')
+        ->join('package_decoration','schedule.package_decoration_id','=','package_decoration.id')
+        ->select('schedule.*','package_decoration.harga_paket')
+        ->where('schedule.id',$schedule_id)->first();
         $kode_schedule=$schedule->kode_schedule;
+        $nominal_total=$schedule->harga_paket;
 
 		$insert = DB::table('invoice')->insert(
             [
@@ -59,6 +68,8 @@ class InvoiceController extends Controller
                 'tanggal_invoice' => $tanggal_invoice,
                 'dp' => $dp,
                 'keterangan' => $keterangan,
+                'nominal_total' => $nominal_total,
+                'nominal_terbayar' => $dp,
                 'status_invoice' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
@@ -113,6 +124,7 @@ class InvoiceController extends Controller
                 'tanggal_invoice' => $tanggal_invoice,
                 'dp' => $dp,
                 'keterangan' => $keterangan,
+                'nominal_terbayar' => $dp,
                 'updated_at' => date('Y-m-d H:i:s')
             ]
         );
@@ -181,48 +193,99 @@ class InvoiceController extends Controller
 
     public function kwitansi($id)
     {
-        $rs=DB::table('invoice')->where('id',$id)->first();
+        $kwitansi=DB::table('kwitansi')
+        ->join('invoice','kwitansi.id_invoice','=','invoice.id')
+        ->select('kwitansi.*','invoice.no_invoice')
+        ->where('id_invoice',$id)->get();
+
+        $inv=DB::table('invoice')->where('id',$id)->first();
+        $kode_kwitansi = "BNZ/KWI/".date('Y')."/".date('m')."/".$this->quickRandom();
 
         $schedule=DB::table('schedule')
         ->leftJoin('package_decoration','schedule.package_decoration_id','=','package_decoration.id')
         ->select('schedule.*',  'package_decoration.harga_paket')
-        ->where('schedule.kode_schedule',$rs->kode_schedule)->first();
-
-        $sisa_pembayaran=$schedule->harga_paket - $rs->dp;
-        $kode_kwitansi = "BNZ/LUNAS/".date('Y')."/".date('m')."/".$this->quickRandom();
+        ->where('schedule.kode_schedule',$inv->kode_schedule)->first();
 
 		$data = array(  
             'indexPage' => "Buat Kwitansi",
-            'rs' => $rs,
-            'sisa_pembayaran' => $sisa_pembayaran,
+            'kwitansi' => $kwitansi,
+            'inv' => $inv,
             'kode_kwitansi' => $kode_kwitansi
 		);
-        return view($this->base.'kwitansi')->with($data);
+        return view('backend.kwitansi.index')->with($data);
     }
 
     public function buatkwitansi(Request $request)
     {
         $id=$request->input('id');
+        $kode_kwitansi=$request->input('kode_kwitansi');
+        $tanggal_kwitansi=$request->input('tanggal_kwitansi');
+        $nominal_pembayaran=str_replace(".", "",$request->input('nominal_pembayaran'));
+        $keterangan_pembayaran=$request->input('keterangan_pembayaran');
+
+        $insert=DB::table('kwitansi')->insert(
+            [
+                'id_invoice' => $id,
+                'kode_kwitansi' => $kode_kwitansi,
+                'tanggal_kwitansi' => $tanggal_kwitansi,
+                'nominal_pembayaran' => $nominal_pembayaran,
+                'keterangan_pembayaran' => $keterangan_pembayaran,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]
+        );
 
         $cek = DB::table('invoice')->where('id',$id)->first();
+        $nominal_terbayar=$cek->nominal_terbayar;
+        $tambahnominal=$nominal_pembayaran+$nominal_terbayar;
+
         $updateschedule=DB::table('schedule')->where('kode_schedule',$cek->kode_schedule)->update(
             [
                 'status' => 2,
                 'updated_at' => date('Y-m-d H:i:s')
             ]
         );
+
         $updateinv=DB::table('invoice')->where('id',$id)->update(
             [
-                'kode_kwitansi' => $request->input('kode_kwitansi'),
-                'tanggal_kwitansi' => $request->input('tanggal_kwitansi'),
-                'sisa_pembayaran' => str_replace(".", "",$request->input('sisa_pembayaran')),
-                'keterangan_pembayaran' => $request->input('keterangan_pembayaran'),
-                'status_invoice' => 1,
+                'nominal_terbayar' => $tambahnominal,
                 'updated_at' => date('Y-m-d H:i:s')
             ]
         );
+        
+        $cekterbaru = DB::table('invoice')->where('id',$id)->first();
+        
+        if($cekterbaru->nominal_total == $cekterbaru->nominal_terbayar)
+        {
+            DB::table('invoice')->where('id',$id)->update(
+                [
+                    'status_invoice' => 1,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]
+            );
+        }
             
-        return redirect()->route('invoice')->with(['success' => 'Invoice telah lunas.']);
+        return redirect()->back()->with(['success' => 'Kwitansi telah diupdate.']);
+    }
+
+    public function hapuskwitansi($id)
+    {
+        $kwitansi=DB::table('kwitansi')->where('id',$id)->first();
+        $nominal_pembayaran=$kwitansi->nominal_pembayaran;
+
+        $invoice=DB::table('invoice')->where('id',$kwitansi->id_invoice)->first();
+        $dikurangi=$invoice->nominal_terbayar - $nominal_pembayaran;
+
+        $updateinvoice=DB::table('invoice')->where('id',$kwitansi->id_invoice)->update(
+            [
+                'nominal_terbayar' => $dikurangi,
+                'updated_at' => date('Y-m-d H:i:s')
+            ]
+        );
+
+
+        DB::table('kwitansi')->where('id',$id)->delete();
+        return redirect()->back()->with(['success' => 'Kwitansi telah dihapus.']);
     }
 	
 }

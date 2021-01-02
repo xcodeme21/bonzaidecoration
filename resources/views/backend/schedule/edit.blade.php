@@ -90,9 +90,21 @@
                                                 <select class="form-control" name="package_decoration_id" id="package_decoration_id" required>
                                                     <option value="">-- Pilih Package Decoration --</option>
                                                     @foreach(@$package as $pak)
-                                                    <option value="{{ @$pak->id }}" @if(@$rs->package_decoration_id == @$pak->id) selected @endif>{{ @$pak->nama_paket }} - Rp. {{ number_format(@$pak->harga_paket,0,',','.') }}</option>
+                                                    <option value="{{ @$pak->id }}" @if(@$rs->package_decoration_id == @$pak->id) selected @endif>{{ @$pak->nama_paket }}</option>
                                                     @endforeach
                                                 </select>
+                                            </div>
+                                        </div> 
+                                        <div class="form-group row">
+                                            <label for="example-password-input" class="col-sm-2 col-form-label text-right">Item</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control editor" rows="10" id="item_paket" name="item_paket">{{ @$rs->item_paket }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="example-password-input" class="col-sm-2 col-form-label text-right">Keterangan</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control editor" rows="5" id="keterangan_paket" name="keterangan_paket" >{{ @$rs->keterangan_paket }}</textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -144,6 +156,32 @@
                             $('#email_client').val('');
                             $('#telepon_client').val('');
                             $('#alamat_client').val('');
+                        }
+                    }
+                });
+            });
+            
+            $('#package_decoration_id').change(function(){
+                var id = $(this).val();
+                var url = '{{ route("schedule.detailpackage", ":id") }}';
+                url = url.replace(':id', id);
+
+                $.ajax({
+                    url: url,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function(data){
+                        if(data != null){
+                            $('#harga_paket').val(data.harga_paket);
+                            tinymce.get('item_paket').setContent(data.item_paket);
+                            tinymce.get('keterangan_paket').setContent(data.keterangan_paket);
+                        }
+                    },
+                    error: function (error) {
+                        if(error != null){
+                            $('#harga_paket').val('');
+                            tinymce.get('item_paket').setContent('');
+                            tinymce.get('keterangan_paket').setContent('');
                         }
                     }
                 });

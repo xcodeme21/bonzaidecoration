@@ -17,6 +17,7 @@
                             <div class="page-title-box">
                                 <div class="float-right">
                                     <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="javascript:void(0);">Invoice</a></li>
                                         <li class="breadcrumb-item active">{{ @$indexPage }}</li>
                                     </ol><!--end breadcrumb-->
                                 </div><!--end /div-->
@@ -33,59 +34,58 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="row-fluid animated bounceInRight" align="right">    
-                                        <a href="{{ route('invoice.tambah') }}" type="button" class="btn btn-primary waves-effect waves-light">+ Tambah</a>
+                                    
+                                <div class="row-fluid animated bounceInRight" align="right">    
+                                        <button type="button" class="btn btn-success waves-effect waves-light">No. Invoice : {{ @$inv->no_invoice }}</button>
+                                        <button onClick="javascript:window.close();" type="button" class="btn btn-danger waves-effect waves-light"><i class="fa fa-times"> Tutup</i> </button>
                                     </div>
                                     <hr>
                                     <div class="table-responsive animated bounceInUp">
-                                        <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                             <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Kode Schedule</th>
                                                 <th>No. Invoice</th>
-                                                <th>Tanggal Invoice</th>
-                                                <th>Nama Client</th>
-                                                <th>Nama Paket</th>
-                                                <th>Harga Paket</th>
-                                                <th>DP</th>
-                                                <th>Nominal Terbayar</th>
+                                                <th>Kode Kwitansi</th>
+                                                <th>Tanggal</th>
+                                                <th>Nominal Pembayaran</th>
                                                 <th>Keterangan</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
                                             </tr>
                                             </thead>
         
         
                                             <tbody>
                                             <?php $no=0; ?>
-                                            @foreach(@$invoice as $rs)
+                                            @foreach(@$kwitansi as $rs)
                                             <?php $no++; ?>
                                             <tr>
                                                 <td>{{ $no }}</td>
-                                                <td>{{ @$rs->kode_schedule }}</td>
                                                 <td>{{ @$rs->no_invoice }}</td>
-                                                <td>{{ @$rs->tanggal_invoice }}</td>
-                                                <td>{{ @$rs->nama_client }}</td>
-                                                <td>{{ @$rs->nama_paket }}</td>
-                                                <td>Rp. {{ number_format(@$rs->nominal_total,0,',','.') }}</td>
-                                                <td>Rp. {{ number_format(@$rs->dp,0,',','.') }}</td>
-                                                <td>Rp. {{ number_format(@$rs->nominal_terbayar,0,',','.') }}
-                                                    <br>
-                                                    <?php $kr=$rs->nominal_total-$rs->nominal_terbayar; ?>
-                                                    <label class="badge badge-danger">Kurang : Rp. {{ number_format(@$kr,0,',','.') }}</label></td>
-                                                <td>{!! @$rs->keterangan !!}</td>
+                                                <td>{{ @$rs->kode_kwitansi }}</td>
+                                                <td>{{ @$rs->tanggal_kwitansi }}</td>
                                                 <td>
-                                                    <label class="badge badge-primary"><i class="fa fa-check"></i> INVOICED</label>
+                                                    Rp. {{ number_format(@$rs->nominal_pembayaran,0,',','.') }}
                                                 </td>
-                                                <td>
-                                                    <a href="{{ route('invoice.edit',@$rs->id) }}" class="btn btn-info btn-xs"><i class="far fa-edit mr-1"></i> Edit</a>
-                                                    <a href="{{ route('invoice.hapus',@$rs->id) }}" class="btn btn-danger btn-xs"><i class="far fa-trash-alt"></i> Hapus</a>
-                                                    <a href="{{ route('invoice.kwitansi',@$rs->id) }}" target="_blank" class="btn btn-success btn-xs"><i class="fa fa-file-pdf"></i> Kwitansi</a>
-                                                    <a href="{{ route('invoice.batal',@$rs->id) }}" class="btn btn-warning btn-xs"><i class="fa fa-times"></i> Batal</a>
+                                                <td>{!! @$rs->keterangan_pembayaran !!}</td>
                                                 </td>
                                             </tr>
                                             @endforeach
+                                            <tr>                                                        
+                                                <td colspan="4" class="border-0"></td>
+                                                <td class="border-0 font-14"><b>Nominal Paket</b></td>
+                                                <td class="border-0 font-14"><b>Rp. {{ number_format(@$inv->nominal_total,0,',','.') }}</b></td>
+                                            </tr>
+                                            <tr>                                                        
+                                                <td colspan="4" class="border-0"></td>
+                                                <td class="border-0 font-14"><b>Nominal Terbayar</b></td>
+                                                <td class="border-0 font-14"><b>Rp. {{ number_format(@$inv->nominal_terbayar,0,',','.') }}</b></td>
+                                            </tr>
+                                            <tr>                                                        
+                                                <td colspan="4" class="border-0"></td>
+                                                <td class="border-0 font-14"><b>Sisa Harus Dibayar</b></td>
+                                                <?php $sisaharusdibayar=$inv->nominal_total -  $inv->nominal_terbayar; ?>
+                                                <td class="border-0 font-14"><b>Rp. {{ number_format(@$sisaharusdibayar,0,',','.') }}</b></td>
+                                            </tr>
                                             </tbody>
                                         </table>    
                                     </div>

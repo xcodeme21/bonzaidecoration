@@ -86,7 +86,7 @@ class ScheduleController extends Controller
         $rs=DB::table('schedule')
         ->leftJoin('client','schedule.client_id','=','client.id')
         ->leftJoin('package_decoration','schedule.package_decoration_id','=','package_decoration.id')
-        ->select('schedule.*','client.nama_client','client.email_client','client.telepon_client','client.alamat_client','package_decoration.nama_paket')
+        ->select('schedule.*','client.nama_client','client.email_client','client.telepon_client','client.alamat_client','package_decoration.nama_paket','package_decoration.item_paket','package_decoration.keterangan_paket')
         ->where('schedule.id',$id)->first();
         $client=DB::table('client')->orderBy('nama_client','ASC')->get();
         $package=DB::table('package_decoration')->orderBy('nama_paket','ASC')->get();
@@ -134,6 +134,13 @@ class ScheduleController extends Controller
     public function detailclient($id)
     {
         $data=DB::table('client')->where('id',$id)->first();
+
+        return response()->json($data);
+    }
+
+    public function detailpackage($id)
+    {
+        $data=DB::table('package_decoration')->where('id',$id)->first();
 
         return response()->json($data);
     }

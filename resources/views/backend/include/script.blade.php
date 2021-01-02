@@ -16,6 +16,16 @@
 <!-- Required datatable js -->
 <script src="{{ asset('public/backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('public/backend/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<!-- Buttons examples -->
+<script src="{{ asset('public/backend/plugins/datatables/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('public/backend/plugins/datatables/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('public/backend/plugins/datatables/jszip.min.js') }}"></script>
+<script src="{{ asset('public/backend/plugins/datatables/pdfmake.min.js') }}"></script>
+<script src="{{ asset('public/backend/plugins/datatables/vfs_fonts.js') }}"></script>
+<script src="{{ asset('public/backend/plugins/datatables/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('public/backend/plugins/datatables/buttons.print.min.js') }}"></script>
+<script src="{{ asset('public/backend/plugins/datatables/buttons.colVis.min.js') }}"></script>
+		
 <script src="{{ asset('public/backend/plugins/moment/moment.js') }}"></script>
 <script src="{{ asset('public/backend/plugins/daterangepicker/daterangepicker.js') }}"></script>
 <script src="{{ asset('public/backend/plugins/select2/select2.min.js') }}"></script>
@@ -30,7 +40,22 @@
 <script src="//cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-       $('.ckeditor').ckeditor();
+		var config = {
+        height : 280,
+        width : 1000,
+        fullPage : true,
+        linkShowAdvancedTab : false,
+        scayt_autoStartup : true,
+        enterMode : Number(2),
+        toolbar : [
+            ['Styles','Bold', 'Italic', 'Underline', '-', 
+             'NumberedList',
+             'BulletedList', 'SpellChecker', '-', 'Undo',
+             'Redo', '-', 'SelectAll', 'NumberedList',
+             'BulletedList','FontSize' ], [ 'UIColor' ] ]
+	};
+	
+       $('.ckeditor').ckeditor(config);
     });
 </script>
 
@@ -41,7 +66,26 @@
 </script>
 
 <script>
-    $('#datatable').DataTable();
+	$('#datatable').DataTable();
+	
+	//Buttons examples
+	var table = $('#datatable-buttons').DataTable({
+      lengthChange: false,
+      buttons: ['excel']
+  });
+
+  table.buttons().container()
+      .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+
+      $('#row_callback').DataTable( {
+        "createdRow": function ( row, data, index ) {
+            if ( data[5].replace(/[\$,]/g, '') * 1 > 150000 ) {
+                $('td', row).eq(5).addClass('highlight');
+            }
+        }
+    } );
+    
+
 </script>
 
 	<script type="text/javascript">
@@ -73,4 +117,25 @@
 			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
 			return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
 		}
+	</script>
+
+	<script src="https://cdn.tiny.cloud/1/vn670tnchzrwe8giwcycvrw3x6xflmv1byubl7xccqpwyrzh/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+	<script type="text/javascript">
+		tinymce.init({
+			selector: 'textarea.editor',
+			height: 300,
+        	readonly : 1,
+			menubar: false,
+			plugins: [
+				'advlist autolink lists link image charmap print preview anchor',
+				'searchreplace visualblocks code fullscreen',
+				'insertdatetime media table paste code help wordcount'
+			],
+			toolbar: 'undo redo | formatselect | ' +
+				'bold italic backcolor | alignleft aligncenter ' +
+				'alignright alignjustify | bullist numlist outdent indent | ' +
+				'removeformat | help',
+			content_css: '//www.tiny.cloud/css/codepen.min.css'
+		});
 	</script>

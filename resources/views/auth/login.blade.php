@@ -28,7 +28,7 @@
                         <div class="card-body">
                             <div class="px-3">
                                 <div class="text-center auth-logo-text">
-                                    <h4 class="mt-0 mb-3 mt-5">Sign in to continue.</h4>
+                                    <img src="{{ asset('public/backend/images/logo.jpeg') }}" alt="logo-small" style="width:150px;">
                                 </div> <!--end auth-logo-text-->  
                                 
                                 @include("backend.include.session")
@@ -119,6 +119,12 @@
                         $('#recaptcha').fadeIn('slow').html(e);
                 });
             });
+        </script>
+        
+        <script>
+            setTimeout(function() {
+            $('.alert').fadeOut('fast');
+        }, 3000);
         </script>
 
         <script>  

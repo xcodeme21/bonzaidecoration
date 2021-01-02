@@ -39,7 +39,7 @@
                                             <div class="">
                                                 <h6 class="mb-0"><b>No. Invoice :</b> {{ @$inv->no_invoice }}</h6>
                                                 <h6 class="mb-0"><b>Tgl. Invoice :</b> {{ @$inv->tanggal_invoice }}</h6>
-                                                <h6 class="mb-0"><b>Keterangan :</b> {{ @$inv->keterangan }}</h6>
+                                                <h6 class="mb-0"><b>Keterangan :</b> {!! @$inv->keterangan !!}</h6>
                                             </div>
                                         </div><!--end col-->
                                         <div class="col-md-6">   
@@ -84,9 +84,15 @@
                                                         </tr>
                                                         <tr>                                                        
                                                             <td colspan="2" class="border-0"></td>
+                                                            <td class="border-0 font-14"><b>Kwitansi Terbayar</b></td>
+                                                            <?php $kwitansiterbayar=$inv->nominal_terbayar - $inv->dp; ?>
+                                                            <td class="border-0 font-14"><b>Rp. {{ number_format(@$kwitansiterbayar,0,',','.') }}</b></td>
+                                                        </tr>
+                                                        <tr>                                                        
+                                                            <td colspan="2" class="border-0"></td>
                                                             <td class="border-0 font-14"><b class="text-danger">Sisa Belum Dibayar</b></td>
                                                             <td class="border-0 font-14">
-                                                            <?php $sisabelumdibayar=$sch->harga_paket - $inv->dp; ?>
+                                                            <?php $sisabelumdibayar=$inv->nominal_total - $inv->nominal_terbayar; ?>
                                                             <b class="text-danger">Rp. {{ number_format(@$sisabelumdibayar,0,',','.') }}</b>
                                                             </td>
                                                         </tr>

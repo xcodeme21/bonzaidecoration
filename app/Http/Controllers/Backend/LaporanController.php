@@ -70,4 +70,21 @@ class LaporanController extends Controller
 		);
         return view($this->base.'cetakkwitansi')->with($data);
     }
+
+    public function lihatkwitansi($id)
+    {
+        $kwitansi=DB::table('kwitansi')
+        ->join('invoice','kwitansi.id_invoice','=','invoice.id')
+        ->select('kwitansi.*','invoice.no_invoice')
+        ->where('id_invoice',$id)->get();
+
+        $inv=DB::table('invoice')->where('id',$id)->first();
+
+		$data = array(  
+            'indexPage' => "Lihat Kwitansi",
+            'kwitansi' => $kwitansi,
+            'inv' => $inv
+		);
+        return view($this->base.'kwitansi')->with($data);
+    }
 }

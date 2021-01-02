@@ -50,6 +50,7 @@ Route::group(['prefix'=>'backend', 'middleware'=>'auth'], function(){
     Route::post('schedule/update', [App\Http\Controllers\Backend\ScheduleController::class, 'update'])->name('schedule.update');
     Route::get('schedule/hapus/{id}', [App\Http\Controllers\Backend\ScheduleController::class, 'hapus'])->name('schedule.hapus');
     Route::get('schedule/detailclient/{id}', [App\Http\Controllers\Backend\ScheduleController::class, 'detailclient'])->name('schedule.detailclient');
+    Route::get('schedule/detailpackage/{id}', [App\Http\Controllers\Backend\ScheduleController::class, 'detailpackage'])->name('schedule.detailpackage');
     
 	/*MASTER INVOICE*/
     Route::get('invoice', [App\Http\Controllers\Backend\InvoiceController::class, 'index'])->name('invoice');
@@ -63,11 +64,13 @@ Route::group(['prefix'=>'backend', 'middleware'=>'auth'], function(){
     Route::post('invoice/batalkan', [App\Http\Controllers\Backend\InvoiceController::class, 'batalkan'])->name('invoice.batalkan');
     Route::get('invoice/kwitansi/{id}', [App\Http\Controllers\Backend\InvoiceController::class, 'kwitansi'])->name('invoice.kwitansi');
     Route::post('invoice/buatkwitansi', [App\Http\Controllers\Backend\InvoiceController::class, 'buatkwitansi'])->name('invoice.buatkwitansi');
+    Route::get('invoice/kwitanasi/hapus/{id}', [App\Http\Controllers\Backend\InvoiceController::class, 'hapuskwitansi'])->name('invoice.hapuskwitansi');
     
     /*LAPORAN*/
     Route::get('laporan', [App\Http\Controllers\Backend\LaporanController::class, 'index'])->name('laporan');
     Route::get('laporan/cetakinvoice/{id}', [App\Http\Controllers\Backend\LaporanController::class, 'cetakinvoice'])->name('laporan.cetakinvoice');
     Route::get('laporan/cetakkwitansi/{id}', [App\Http\Controllers\Backend\LaporanController::class, 'cetakkwitansi'])->name('laporan.cetakkwitansi');
+    Route::get('laporan/lihatkwitansi/{id}', [App\Http\Controllers\Backend\LaporanController::class, 'lihatkwitansi'])->name('laporan.lihatkwitansi');
     
 
 });
