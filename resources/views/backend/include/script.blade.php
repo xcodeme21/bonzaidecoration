@@ -71,7 +71,7 @@
 	//Buttons examples
 	var table = $('#datatable-buttons').DataTable({
       lengthChange: false,
-      buttons: ['excel']
+      buttons: ['excel','pdf']
   });
 
   table.buttons().container()
